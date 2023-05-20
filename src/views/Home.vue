@@ -39,7 +39,7 @@
           <div class="col">
           <div class="card shadow-sm">
              <text x="80%" y="80%" fill="#eceeef" dy=".3em">
-                <a :href="'#'">
+                <a :href="'http://127.0.0.1:5173/products_for_sale/' + category.category">
                     <img :src="'http://127.0.0.1:8000/storage/images/prod_categories/' + category.category + '.jpg'"
                         :alt="category.category"
                         :title="category.category"
