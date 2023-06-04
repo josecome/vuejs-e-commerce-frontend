@@ -7,7 +7,12 @@
   const localToken = ref('no_token')
   const list_of_products = ref([])
   const product_status = ref([])
+  const Products_in_Cart = ref([])
   const count = ref(0)
+  const Ids_of_Products_in_Cart = ref([])
+  const Qnty_of_Products_in_Cart = ref([])
+  const purchase_status = ref('Order')
+  const total_price_to_pay = ref(0)
 
   let product_type = route.params.category
   const link = ref(`http://127.0.0.1:8000/api/products_for_sale/${ product_type }`)
@@ -30,12 +35,65 @@
   const setDataInForm = () => {
     console.log('test')
   }
+  const updateCart = () => {
+    /*count.value = Products_in_Cart.value.length
+    Ids_of_Products_in_Cart.value = list_of_products.value.map((ids_column) => { return ids_column.id })
+    Qnty_of_Products_in_Cart.value = list_of_products.value.map((qnty_column) => { return qnty_column.qnty })
+    console.log('Qnty: ' + Qnty_of_Products_in_Cart)*/
+  }
   const checkProduct = (e, id, b) => {
-            var chk = e.target.textContent;
-            product_status[id] = 1;
-            chk === "Add to Cart" ? count.value++ : count.value--;
-            chk === "Add to Cart" ? Product_in_cart(id, "p") : Product_in_cart(id, "r") //p -> put in Cart and r -> remove from cart
-            chk === "Add to Cart" ? product_status[id] = 1 : product_status[id] = 0;
+    var chk = e.target.textContent;
+    product_status[id] = 1;
+    chk === "Add to Cart" ? count.value++ : count.value--;
+    chk === "Add to Cart" ? Product_in_cart(id, "p") : Product_in_cart(id, "r") //p -> put in Cart and r -> remove from cart
+    chk === "Add to Cart" ? product_status[id] = 1 : product_status[id] = 0;
+  }
+  const Product_in_cart = async (id, v) => {
+    var rs_response = "";
+    if(v === "p"){
+      await axios.post('/add_product_in_cart', {//put data
+        id: id
+      })
+      .then((response) => {
+      rs_response = response.data
+        console.log("rs: " + rs_response)
+      }, (error) => {
+                    rs_response = error;
+      });
+    } else if(v === "r") {
+      await axios.delete(`/delete_item_in_cart/${ id }`)
+      .then((response) => {
+        rs_response = response.data
+      }, (error) => {
+        rs_response = error;
+      });
+        console.log('rs: ' + rs_response)
+    }
+    Products_in_Cart.value = rs_response
+    updateCart();
+  }
+  const ChangeProductQnty = async ( id, v) => {
+    await axios.patch(`/cartupdate/${ id }`, {
+      qnty: Qnty_of_Products_in_Cart[v]
+    })
+    .then((response) => {
+      rs_response = response.data
+      Products_in_Cart.value = rs_response
+      updateCart();
+    }, (error) => {
+      rs_response = error;
+    });
+    console.log(rs_response)
+  }
+  const MarkAsOrdered = () => {
+    purchase_status.value = 'Purchase'
+  }
+  const format_to_money_style = (v) => {
+    const formatter = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    });
+    return formatter.format(v);
   }
   onMounted(getData);
 
