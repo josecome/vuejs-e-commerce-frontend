@@ -16,6 +16,21 @@ const router = createRouter({
       component: Products_for_sales
     },
     {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/logout',
+      name: 'logout',
+      component: Logout
+    },
+    {
+      path: '/create_account',
+      name: 'create_account',
+      component: Registration
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting
