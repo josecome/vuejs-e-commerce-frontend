@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Login from '../views/Login.vue'
 import Logout from '../views/Logout.vue'
-import Home from '../views/Home.vue'
 import Registration from '../views/Registration.vue'
 import Home from '../views/Home.vue'
 import Products_for_sales from '../views/Products_for_sales.vue'
