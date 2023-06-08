@@ -1,5 +1,5 @@
 <script setup>
-  import { ref, onMounted } from 'vue'
+  import { ref, onBeforeMount, onMounted } from 'vue'
   import { useRoute } from 'vue-router'
   import axios from 'axios'
   import Modal from "@/components/Cart.vue";
@@ -20,6 +20,7 @@
   console.log(link.value)
   const getData = async () => {
     const v = { "products": "all" }
+    localToken.value = localStorage.getItem('token')
     const res = await axios.get(link.value, v,
       {
         headers: {
@@ -104,7 +105,18 @@
     });
     return formatter.format(v);
   }
-  onMounted(getData);
+  const getDataInCart = async () => {
+    const rs = await axios.get('/productincart/1') //get data        
+      rs_response = rs.data;
+      Products_in_Cart.value = rs_response;
+      updateCart();
+  }    
+  onBeforeMount(
+    getData
+  );
+  onMounted(
+    getDataInCart
+  );
 
 </script>
 <style>
