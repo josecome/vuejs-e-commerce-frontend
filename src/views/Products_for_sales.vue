@@ -2,6 +2,7 @@
   import { ref, onMounted } from 'vue'
   import { useRoute } from 'vue-router'
   import axios from 'axios'
+  import Modal from "@/components/Cart.vue";
 
   const route = useRoute()
   const localToken = ref('no_token')
@@ -34,6 +35,14 @@
   }
   const setDataInForm = () => {
     console.log('test')
+  }
+  let cartModal= ref(null);
+
+  function showCart() {
+    cartModal.value.show();
+  }
+  function hideCart() {
+    cartModal.value.hide();
   }
   const updateCart = () => {
     /*count.value = Products_in_Cart.value.length
@@ -109,12 +118,12 @@
           <div style="height: 60px; width: 100%; background-color: #EAEDED;">
             <span style="float: left; font-size: 28px; padding: 8px;"><strong>Available Products</strong></span>
             <a href="#" class="notification" style="float: right; padding: 8px;"
-            data-toggle="modal" data-target="#myModal"
+            @click="showCart"
             >
                 <span class="bi bi-cart-check Icn"></span>
                 <span class="badge">{{ count }}</span>
             </a>
-        </div>
+          </div>
             <div v-for="product_item in list_of_products" :key="id" class="col">
                 <div class="card shadow-sm">
                 <text x="80%" y="80%" fill="#eceeef" dy=".3em">
@@ -146,16 +155,9 @@
   </div>
 
   <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
-
-      <!-- Modal content-->
-      <div class="modal-content" style="width: 100%;">
-        <div class="modal-header" style="width: 100%;">
-          <h4 class="modal-title" style="float: left;"><strong>Products in Cart</strong></h4>
-          <button type="button" class="close" data-dismiss="modal" style="float: right;">&times;</button>
-        </div>
-        <div id="prodInCart" class="modal-body">
+  <Modal title="Products in Cart" ref="cartModal">
+    <template #body>
+      <div id="prodInCart" class="modal-body">
           <table>
                 <thead>
                     <tr>
@@ -199,19 +201,17 @@
                 </tbody>
           </table>
         </div>
-        <div class="modal-footer">
-           <form action="/confirm_payment" method="POST" v-show="purchase_status === 'Purchase'">
-               <input type="hidden" name="ids" v-model="Ids_of_Products_in_Cart" />
-               <input type="hidden" name="totalprice" value="{{ total_price_to_pay }}" />
-               <button type="submit" class="btn btn-danger">Purchase</button>
-           </form>
-          <button type="button" :class="purchase_status === 'Order' ? 'btn btn-success' : 'btn btn-danger'"
-              @click="MarkAsOrdered()"  v-show="purchase_status !== 'Purchase'">Order</button>
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
+    </template>
+    <template #footer>
+      <form action="/confirm_payment" method="POST" v-show="purchase_status === 'Purchase'">
+        <input type="hidden" name="ids" v-model="Ids_of_Products_in_Cart" />
+        <input type="hidden" name="totalprice" value="{{ total_price_to_pay }}" />
+        <button type="submit" class="btn btn-danger">Purchase</button>
+      </form>
+      <button type="button" :class="purchase_status === 'Order' ? 'btn btn-success' : 'btn btn-danger'"
+        @click="MarkAsOrdered()"  v-show="purchase_status !== 'Purchase'">Order</button>
+      <button type="button" class="btn btn-default" @click="hideCart">Close</button>
+    </template>
+</Modal>
 <!--                                                 -->
 </template>
