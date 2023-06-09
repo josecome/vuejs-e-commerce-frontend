@@ -106,9 +106,19 @@
     return formatter.format(v);
   }
   const getDataInCart = async () => {
-    const rs = await axios.get('/productincart/1') //get data        
-      rs_response = rs.data;
-      Products_in_Cart.value = rs_response;
+    console.log('Get Product in Cart' + localToken.value)
+    const v = { "products": "all" }
+    const res = await axios.get('http://127.0.0.1:8000/api/productincart/1', v,
+      {
+        headers: {
+          Accept: 'application/json',
+            //'Content-Type': 'application/json',
+          Authorization: `Bearer ${ localToken.value }`
+        }
+      }      
+      );     
+      console.log('Get Product in Cart: ' + res.data)
+      Products_in_Cart.value = res.data;
       updateCart();
   }    
   onBeforeMount(
