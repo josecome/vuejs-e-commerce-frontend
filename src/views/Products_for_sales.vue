@@ -1,10 +1,12 @@
 <script setup>
-  import { ref, onBeforeMount, onMounted } from 'vue'
+  import { ref, onBeforeMount, onMounted, watch } from 'vue'
   import { useRoute } from 'vue-router'
   import axios from 'axios'
   import Modal from "@/components/Cart.vue";
 
   const route = useRoute()
+  let product_type = route.params.category
+
   const localToken = ref('no_token')
   const list_of_products = ref([])
   const product_status = ref([])
@@ -14,8 +16,9 @@
   const Qnty_of_Products_in_Cart = ref([])
   const purchase_status = ref('Order')
   const total_price_to_pay = ref(0)
-
-  let product_type = route.params.category
+  const category_options = ref([])
+  const selected_category = ref('' + product_type)
+  
   const link = ref(`http://127.0.0.1:8000/api/products_for_sale/${ product_type }`)
   console.log(link.value)
   const getData = async () => {
@@ -105,6 +108,16 @@
     });
     return formatter.format(v);
   }
+  async function callOtherCategory() {
+    if (confirm(`Show ${ selected_category.value } products`) == true) {
+      try {
+        const rs = await axios.get(`/products_for_sale_list/${ this.selected_category }`)
+        list_of_products.value = rs.data
+      } catch(err) {
+        console.log(err)
+      }
+    }
+  }
   const getDataInCart = async () => {
     console.log('Get Product in Cart' + localToken.value)
     const v = { "products": "all" }
@@ -120,7 +133,24 @@
       console.log('Get Product in Cart: ' + res.data)
       Products_in_Cart.value = res.data;
       updateCart();
-  }    
+      
+      //Later this code will be removed from here
+      const rs = await axios.get('http://127.0.0.1:8000/api/', v,
+      {
+        headers: {
+          Accept: 'application/json',
+            //'Content-Type': 'application/json',
+          Authorization: `Bearer ${ localToken.value }`
+        }
+      }         
+      ) //get data
+      console.log('z')
+      console.log(rs.data)
+      category_options.value = rs.data.map((ctgry) => ctgry.category);
+  };
+  watch(selected_category, (val, oldval) => {
+        callOtherCategory();
+  });    
   onBeforeMount(
     getData
   );
@@ -138,7 +168,15 @@
     <div class="container">
         <div id="app" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
           <div style="height: 60px; width: 100%; background-color: #EAEDED;">
-            <span style="float: left; font-size: 28px; padding: 8px;"><strong>Available Products</strong></span>
+            <span style="float: left; font-size: 28px; padding: 8px;"><strong>
+                Available Products
+                <select v-model="selected_category">
+                    <option disabled value="">Other category</option>
+                    <option v-for="category in category_options" :value="category">
+                        {{ category }}
+                    </option>
+                </select>
+            </strong></span>
             <a href="#" class="notification" style="float: right; padding: 8px;"
             @click="showCart"
             >
