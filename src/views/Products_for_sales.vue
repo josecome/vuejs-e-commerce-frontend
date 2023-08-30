@@ -150,7 +150,14 @@
   };
   watch(selected_category, (val, oldval) => {
         callOtherCategory();
-  });    
+  });
+  watch(Products_in_Cart, (val, oldval) => {
+        var m = Products_in_Cart.value.map((i)=> i.id )
+        count.value = m.reduce((total, num) => total + 1);
+
+        var price_qnty = Products_in_Cart.value.map((i)=> i.price * i.qnty )
+        total_price_to_pay.value = price_qnty.reduce((total, num) => total + num);
+  });
   onBeforeMount(
     getData
   );
@@ -221,7 +228,7 @@
           <table>
                 <thead>
                     <tr>
-                        <th>Product</th><th>Price</th><th>Qnty</th><th>Remove</th>
+                        <th>Product</th><th>Price</th><th>Qnty</th><th>Total (Item)</th><th>Remove</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -239,20 +246,23 @@
                             <input type='number'
                                 style='width: 60px'
                                 :disabled="purchase_status !== 'Order'"
-                                v-model = "Qnty_of_Products_in_Cart[index]"
+                                v-model = "product_item_in_cart.qnty"
                                 v-on:change="ChangeProductQnty(product_item_in_cart.id, index)"
                             />
+                        </td>
+                        <td>
+                            {{ format_to_money_style(product_item_in_cart.price * product_item_in_cart.qnty) }}
                         </td>
                         <td>
                             <i @click="Product_in_cart(product_item_in_cart.id, 'r')" class="bi bi-x-octagon-fill" style="float: right; padding-left: 6px; color: #E74C3C;"></i>
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td colspan="3">
                             <strong>Total</strong>
                         </td>
                         <td>
-                        <strong>{{ total_price_to_pay }}</strong>
+                        <strong>{{ format_to_money_style(total_price_to_pay) }}</strong>
                         </td>
                         <td>
 
