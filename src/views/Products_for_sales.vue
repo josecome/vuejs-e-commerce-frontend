@@ -2,7 +2,7 @@
   import { ref, onBeforeMount, onMounted, watch } from 'vue'
   import { useRoute } from 'vue-router'
   import axios from 'axios'
-  import Modal from "@/components/Cart.vue";
+  import Modal from "@/components/prodModal.vue";
 
   const route = useRoute()
   let product_type = route.params.category
@@ -40,13 +40,15 @@
   const setDataInForm = () => {
     console.log('test')
   }
-  let cartModal= ref(null);
 
-  function showCart() {
-    cartModal.value.show();
+  let cartModal= ref(null);
+  let prodDetailModal = ref(null);
+
+  function showProdModal(v) {
+    v === 'c'? cartModal.value.show() : prodDetailModal.value.show();
   }
-  function hideCart() {
-    cartModal.value.hide();
+  function hideProdModal(v) {
+    v === 'c'? cartModal.value.hide() : prodDetailModal.value.hide();
   }
   const updateCart = () => {
     /*count.value = Products_in_Cart.value.length
@@ -185,7 +187,7 @@
                 </select>
             </strong></span>
             <a href="#" class="notification" style="float: right; padding: 8px;"
-            @click="showCart"
+              @click="showProdModal('c')"
             >
                 <span class="bi bi-cart-check Icn"></span>
                 <span class="badge">{{ count }}</span>
@@ -195,6 +197,7 @@
                 <div class="card shadow-sm">
                 <text x="80%" y="80%" fill="#eceeef" dy=".3em">
                    <img :src="'http://127.0.0.1:8000/storage/images/products/' + product_item.image_link"
+                   @click="showProdModal('p')"
                    :title="product_item.product"
                    style="width: 100%; height: 100%;"
                 />
@@ -220,7 +223,18 @@
   </div>
 </div>   
   </div>
-
+  <!-- Modal of Product in detail -->
+  <Modal title="Product successfully purchased" ref="prodDetailModal">
+    <template #body>
+      <div id="prodDetail" class="modal-body">
+          Body
+      </div>
+    </template>
+    <template #footer>
+      <button type="button" class="btn btn-default" @click="hideProdModal('p')">Close</button>
+    </template>
+</Modal>
+  <!-- End of Modal Product in detail -->
   <!-- Modal -->
   <Modal title="Products in Cart" ref="cartModal">
     <template #body>
@@ -280,7 +294,7 @@
       </form>
       <button type="button" :class="purchase_status === 'Order' ? 'btn btn-success' : 'btn btn-danger'"
         @click="MarkAsOrdered()"  v-show="purchase_status !== 'Purchase'">Order</button>
-      <button type="button" class="btn btn-default" @click="hideCart">Close</button>
+      <button type="button" class="btn btn-default" @click="hideProdModal('c')">Close</button>
     </template>
 </Modal>
 <!--                                                 -->
