@@ -6,6 +6,10 @@ defineProps({
     type: String,
     default: "<<Title goes here>>",
   },
+  addedToCart: {
+    type: Boolean,
+    default: false,
+  }
 });
 let modalEle = ref(null);
 let thisModalObj = null;
@@ -28,7 +32,7 @@ defineExpose({ show: _show, hide: _hide });
     <div class="modal-dialog">
       <div class="modal-content" style="width: 700px;">
         <div class="modal-header">
-          <h5 class="modal-title" id="prodModalLabel">{{ title }}</h5>
+          <h5 class="modal-title" id="prodModalLabel"><i v-show="addedToCart" class='bi bi-check-circle'></i>{{ title }}</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

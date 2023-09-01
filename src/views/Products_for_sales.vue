@@ -18,8 +18,13 @@
   const total_price_to_pay = ref(0)
   const category_options = ref([])
   const selected_category = ref('' + product_type)
+  const selected_product = ref('')
+  const selected_description = ref('')
+  const selected_image_link = ref('')
+  const rel_prod = ref([1, 2, 3])
+  const root_link = ref('http://127.0.0.1:8000')
   
-  const link = ref(`http://127.0.0.1:8000/api/products_for_sale/${ product_type }`)
+  const link = ref(`${ root_link.value }/api/products_for_sale/${ product_type }`)
   console.log(link.value)
   const getData = async () => {
     const v = { "products": "all" }
@@ -50,6 +55,12 @@
   function hideProdModal(v) {
     v === 'c'? cartModal.value.hide() : prodDetailModal.value.hide();
   }
+  const setSelectedProduct = (s_prod, s_desc, s_link) => {
+    selected_product.value = s_prod;
+    selected_description.value = s_desc;
+    selected_image_link.value = s_link;
+    console.log(s_prod + ',' + s_desc + ',' + s_link)
+  }      
   const updateCart = () => {
     /*count.value = Products_in_Cart.value.length
     Ids_of_Products_in_Cart.value = list_of_products.value.map((ids_column) => { return ids_column.id })
@@ -196,8 +207,8 @@
             <div v-for="product_item in list_of_products" :key="id" class="col">
                 <div class="card shadow-sm">
                 <text x="80%" y="80%" fill="#eceeef" dy=".3em">
-                   <img :src="'http://127.0.0.1:8000/storage/images/products/' + product_item.image_link"
-                   @click="showProdModal('p')"
+                   <img :src="`${ root_link }/storage/images/products/` + product_item.image_link"
+                   @click="setSelectedProduct(product_item.product, product_item.description, product_item.image_link),showProdModal('p')"
                    :title="product_item.product"
                    style="width: 100%; height: 100%;"
                 />
@@ -224,10 +235,63 @@
 </div>   
   </div>
   <!-- Modal of Product in detail -->
-  <Modal title="Product successfully purchased" ref="prodDetailModal">
+  <Modal title="Successfull added to Cart" addedToCart="true" ref="prodDetailModal">
     <template #body>
       <div id="prodDetail" class="modal-body">
-          Body
+        <table>
+            <tr>
+                <td>
+                    <img :src="`${ root_link }/storage/images/products/${ selected_image_link}`"
+                      :title="{ selected_product }"
+                      style="width: 100%; height: 100%;"
+                    />
+                </td>
+                <td>
+                    <div style="float: left; margin-top: 0px;">
+                       <strong>{{ selected_product }}</strong><br>
+                       {{ selected_description }}
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button @click="showProdModal('c')" style="padding: 10px" class="btn btn-secondary rounded-pill">View Cart</button>
+                    <button @click="hideProdModal('p')" class="btn btn-secondary rounded-pill">Continue Shopping</button>
+                    <button @click="MarkAsOrdered(), showProdModal('c')" style="padding: 10px" class="btn btn-secondary rounded-pill">Checkout</button>
+                </td>
+            </tr>
+            <tr>
+            <td colspan="2" style="text-align: center;">
+                <span>Related Products</span>
+            </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center; display: flex;">
+                <div v-for="product_related in list_of_products.slice(1, 4)">
+                    <table>
+                        <tr>
+                            <td>
+                                <img :src="`${ root_link }/storage/images/products/${ product_related.image_link }`"
+                                    :title="product_related.description"
+                                    style="width: 120px; height: 80px;"
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>{{ product_related.product }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>{{ product_related.description }}</td>
+                        </tr>
+                        <tr>
+                            <td><button @click="checkProduct($event, product_related.id, product_related.product)">Add to Cart</button></td>
+                        </tr>
+                    </table>
+                </div>
+                </td>
+            </tr>
+        </table>
       </div>
     </template>
     <template #footer>
