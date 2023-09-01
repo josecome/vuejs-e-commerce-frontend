@@ -1,9 +1,11 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRoute } from 'vue-router'
+const route = useRoute();
+console.log('Route Name: ' + route.name)
 </script>
 
 <template>
-  <header>
+  <header v-show="route.name !== 'dashboard'">
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="45" height="45" /> <span>e-commerce</span>
     <nav>
       <RouterLink to="/login">Login</RouterLink>/

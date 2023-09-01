@@ -4,6 +4,7 @@ import Logout from '../views/Logout.vue'
 import Registration from '../views/Registration.vue'
 import Home from '../views/Home.vue'
 import Products_for_sales from '../views/Products_for_sales.vue'
+import Dashboard from '../views/Dashboard.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,6 +18,11 @@ const router = createRouter({
       path: '/products_for_sale/:category',
       name: 'products_for_sale',
       component: Products_for_sales
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard
     },
     {
       path: '/login',
