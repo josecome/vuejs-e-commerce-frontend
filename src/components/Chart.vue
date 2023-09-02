@@ -28,7 +28,24 @@ import { GREEK_BIN } from 'mysql/lib/protocol/constants/charsets'
         }
       }
     },
+    methods: {
+        async getData() {
+            try {
+            const res = await axios.get('/api/dashboard_data', {
+              params: {
+                type_of_data: 'products'
+              }
+            });
+            //this.chartData = res;            
+            }catch(err){}
+        }
+    },
+    mounted () {
+        getData();
+    },
     computed: {
+      chartData() { return this.chartData },
+      chartOptions() { return this.chartOptions },  
       chartStyles () {
         return {
           /* backgroundColor: "rgba(103, 140, 249 , 1)",*/
