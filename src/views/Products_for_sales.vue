@@ -179,10 +179,7 @@
   );
 
 </script>
-<style>
-  @import "bootstrap/dist/css/bootstrap.css";
-  @import "bootstrap-icons/font/bootstrap-icons.css";
-</style>
+
 <template>
   <div class="album py-5 bg-light">
     <div class="container">

@@ -15,7 +15,10 @@ console.log('Route Name: ' + route.name)
 
   <RouterView />
 </template>
-
+<style>
+  @import "bootstrap/dist/css/bootstrap.css";
+  @import "bootstrap-icons/font/bootstrap-icons.css";
+</style>
 <style scoped>
 
 </style>

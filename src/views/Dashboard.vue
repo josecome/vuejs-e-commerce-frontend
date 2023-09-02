@@ -140,10 +140,6 @@
   </div>
 </div>
 </template>
-<style>
-    @import "bootstrap/dist/css/bootstrap.css";
-    @import "bootstrap-icons/font/bootstrap-icons.css";
-</style>
 <style scoped>
       .bd-placeholder-img {
         font-size: 1.125rem;
