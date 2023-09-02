@@ -41,7 +41,7 @@ import { GREEK_BIN } from 'mysql/lib/protocol/constants/charsets'
         }
     },
     mounted () {
-        getData();
+        this.getData();
     },
     computed: {
       chartData() { return this.chartData },
