@@ -12,10 +12,10 @@ const router = useRouter()
 const pth = computed(() => route.path)
 const auth_store = useStoreAuth()
 const {  isLoggedin } = storeToRefs(auth_store)
-watch(isLoggedin, () => route.name === 'dashboard' && !isLoggedin.value ? router.push({ name: 'login' }) : router.push({ name: 'dashboard' }) )
+watch(isLoggedin, () => route.name === 'dashboard' && !isLoggedin.value ? router.push({ name: 'login' }) : '' )
 onMounted(() => { 
   auth_store.LoginUserByToken() 
-  route.name === 'dashboard' && !isLoggedin.value ? router.push({ name: 'login' }) : router.push({ name: 'dashboard' })
+  route.name === 'dashboard' && !isLoggedin.value ? router.push({ name: 'login' }) : ''
 })
 console.log('Route Name: ' + route.name)
 </script>
