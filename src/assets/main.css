@@ -1,35 +1,39 @@
 nav {
-    float: right;
-    margin-top: 4px;
+  float: right;
+  margin-top: 4px;
 }
-.addToChrt { background-color: #239B56 }
-.rmvToChrt { background-color: #FF5733 }
+.addToChrt {
+  background-color: #239b56;
+}
+.rmvToChrt {
+  background-color: #ff5733;
+}
 
 .notification {
-    color: black;
-    text-decoration: none;
-    padding: 1px 12px;
-    position: relative;
-    display: inline-block;
-    border-radius: 2px;
+  color: black;
+  text-decoration: none;
+  padding: 1px 12px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
 }
 
 .notification:hover {
-    background: red;
+  background: red;
 }
 
 .notification .badge {
-   position: absolute;
-   top: -1px;
-   right: -1px;
-   padding: 5px 10px;
-   border-radius: 50%;
-   background-color: red;
-   color: white;
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
 }
-.Icn{
-   font-size: 2em;
+.Icn {
+  font-size: 2em;
 }
 #prodInCart td {
-    padding-right: 60px;
+  padding-right: 60px;
 }
