@@ -1,11 +1,13 @@
 <script setup>
 import { ref, reactive, onBeforeMount, onMounted, watch } from 'vue'
-const prod = ref([]);
-const has_data = ref(false);
-const page = ref('');
+import axios from 'axios'
+
+const data = ref([]);
+const page = ref(''); //add category id
 const new_product_added = ref(false);
 const product = reactive({ id: '', product: '', description: '', price: '', image_link: '' })
-submit = async () => {
+
+const submit = async () => {
     const v = { 
         id: product.id,
         product: product.product,
@@ -21,12 +23,12 @@ submit = async () => {
       }
     })
     new_product_added.value = true;
-    console.log(res)
+    data.value = res.data;
 }
 </script>
 <template>
   <main>
-    <div v-show="new_product_added">{{ res.data }}</div>
+    <div v-show="new_product_added">{{ data }}</div>
     <h1>Add New Product</h1>
     <form @submit.prevent class="" enctype="multipart/form-data">
       <div class="">
@@ -90,11 +92,12 @@ submit = async () => {
           <div class="">
             <Button
                type="submit"
-               @log-in="submit"
-               :text="'Submit'"
+               @click="submit"
                :color="'#73C6B6'"
-                :class_name="'btn btn-primary'"
-            />
+               class="btn btn-primary"
+            >
+            Submit
+            </Button>
           </div>
         </div>
       </div>
