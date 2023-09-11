@@ -1,6 +1,23 @@
 <script setup>
+import { ref, onBeforeMount, onMounted, watch } from 'vue'
 const category = ref('');
 const products = ref([]);
+const link = ref(`${root_link.value}/api/product/${ category }`)
+console.log(link.value)
+const getData = async () => {
+  const v = { products: 'all' }
+  localToken.value = localStorage.getItem('token')
+  const res = await axios.get(link.value, v, {
+    headers: {
+      Accept: 'application/json',
+      //'Content-Type': 'application/json',
+      Authorization: `Bearer ${localToken.value}`
+    }
+  })
+  list_of_products.value = res.data
+  console.log(res)
+}
+onBeforeMount(getData)
 </script>
 <template>
         <main>
