@@ -4,6 +4,7 @@ import Logout from '../views/Logout.vue'
 import Registration from '../views/Registration.vue'
 import Home from '../views/Home.vue'
 import Product_form from '../views/Product_form.vue'
+import Product from '../views/Product.vue'
 import Products_for_sales from '../views/Products_for_sales.vue'
 import Dashboard from '../views/Dashboard.vue'
 import { storeToRefs } from 'pinia'
@@ -21,6 +22,11 @@ const router = createRouter({
       path: '/product_form',
       name: 'product_form',
       component: Product_form
+    },
+    {
+      path: '/product/:category',
+      name: 'product',
+      component: Product
     },
     {
       path: '/products_for_sale/:category',

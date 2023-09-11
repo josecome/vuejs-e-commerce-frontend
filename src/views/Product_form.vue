@@ -2,28 +2,28 @@
 import { ref, reactive, onBeforeMount, onMounted, watch } from 'vue'
 import axios from 'axios'
 
-const data = ref([]);
-const page = ref(''); //add category id
-const new_product_added = ref(false);
+const data = ref([])
+const page = ref('') //add category id
+const new_product_added = ref(false)
 const product = reactive({ id: '', product: '', description: '', price: '', image_link: '' })
 
 const submit = async () => {
-    const v = { 
-        id: product.id,
-        product: product.product,
-        description: product.description,
-        price: product.price,
-        image_link: product.image_link
+  const v = {
+    id: product.id,
+    product: product.product,
+    description: product.description,
+    price: product.price,
+    image_link: product.image_link
+  }
+  const res = await axios.post('/api/add_product', v, {
+    headers: {
+      Accept: 'application/json',
+      //'Content-Type': 'application/json',
+      Authorization: `Bearer ${localToken.value}`
     }
-    const res = await axios.post('/api/add_product', v, {
-      headers: {
-        Accept: 'application/json',
-        //'Content-Type': 'application/json',
-        Authorization: `Bearer ${localToken.value}`
-      }
-    })
-    new_product_added.value = true;
-    data.value = res.data;
+  })
+  new_product_added.value = true
+  data.value = res.data
 }
 </script>
 <template>
@@ -90,13 +90,8 @@ const submit = async () => {
         <div class="mb-3">
           <label class=""></label>
           <div class="">
-            <Button
-               type="submit"
-               @click="submit"
-               :color="'#73C6B6'"
-               class="btn btn-primary"
-            >
-            Submit
+            <Button type="submit" @click="submit" :color="'#73C6B6'" class="btn btn-primary">
+              Submit
             </Button>
           </div>
         </div>
