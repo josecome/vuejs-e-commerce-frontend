@@ -1,12 +1,32 @@
 <script setup>
 import { ref, reactive, onBeforeMount, onMounted, watch } from 'vue'
-const prod = ref([])
-const has_data = ref(false)
-const page = ref('')
+const prod = ref([]);
+const has_data = ref(false);
+const page = ref('');
+const new_product_added = ref(false);
 const product = reactive({ id: '', product: '', description: '', price: '', image_link: '' })
+submit = async () => {
+    const v = { 
+        id: product.id,
+        product: product.product,
+        description: product.description,
+        price: product.price,
+        image_link: product.image_link
+    }
+    const res = await axios.post('/api/add_product', v, {
+      headers: {
+        Accept: 'application/json',
+        //'Content-Type': 'application/json',
+        Authorization: `Bearer ${localToken.value}`
+      }
+    })
+    new_product_added.value = true;
+    console.log(res)
+}
 </script>
 <template>
   <main>
+    <div v-show="new_product_added">{{ res.data }}</div>
     <h1>Add New Product</h1>
     <form @submit.prevent class="" enctype="multipart/form-data">
       <div class="">
@@ -67,7 +87,15 @@ const product = reactive({ id: '', product: '', description: '', price: '', imag
         <input type="hidden" name="category" value="{{ page }}" />
         <div class="mb-3">
           <label class=""></label>
-          <div class=""></div>
+          <div class="">
+            <Button
+               type="submit"
+               @log-in="submit"
+               :text="'Submit'"
+               :color="'#73C6B6'"
+                :class_name="'btn btn-primary'"
+            />
+          </div>
         </div>
       </div>
     </form>
