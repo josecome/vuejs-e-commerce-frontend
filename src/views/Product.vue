@@ -55,7 +55,7 @@ onMounted(getData)
           <td>{{ product.user_id }}</td>
           <td>
             <img
-              :src="'/storage/images/products/' + product.image_link"
+              :src="root_link + '/storage/images/products/' + product.image_link"
               style="width: 60px; height: 40px"
             />
           </td>
